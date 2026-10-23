@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trình Xem & Lưu Truyện</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        body { background: #f5f5f5; padding: 15px; max-width: 600px; margin: 0 auto; }
+        h1 { text-align: center; color: #222; margin-bottom: 20px; font-size: 22px; }
+        .box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 15px; }
+        input, button, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
+        button { background: #4CAF50; color: white; border: none; cursor: pointer; font-weight: bold; }
+        button:hover { background: #45a049; }
+        #preview { width: 100%; min-height: 400px; border: 1px solid #ccc; border-radius: 8px; background: white; margin-top: 10px; }
+        .btn-secondary { background: #2196F3; }
+        .btn-secondary:hover { background: #1976D2; }
+        .note { font-size: 13px; color: #666; margin-top: 10px; line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+<h1>📖 Trình Xem & Lưu Truyện</h1>
+
+<div class="box">
+    <label>🔗 Link trang truyện:</label>
+    <input type="url" id="pageUrl" placeholder="Dán link vào đây...">
+    
+    <label>📖 Chương/Tập:</label>
+    <input type="text" id="chapterNum" placeholder="VD: 569">
+    
+    <button onclick="loadPage()">📂 Mở Truyện</button>
+    <button class="btn-secondary" onclick="captureScreen()">📸 Chụp & Lưu Trang</button>
+    
+    <p class="note">⚠️ Một số trang web chặn nhúng bên ngoài vì lý do bảo mật. Nếu không hiển thị, bạn có thể mở link trực tiếp trong trình duyệt rồi chụp màn hình thủ công.</p>
+</div>
+
+<div class="box">
+    <h3>Xem trước trang:</h3>
+    <iframe id="preview" src="" title="Xem truyện"></iframe>
+</div>
+
+<script>
+function loadPage() {
+    const baseUrl = document.getElementById('pageUrl').value;
+    const chap = document.getElementById('chapterNum').value;
+    const fullUrl = baseUrl + chap;
+    document.getElementById('preview').src = fullUrl;
+}
+
+function captureScreen() {
+    alert('💡 Vì lý do bảo mật trình duyệt, không thể tự động chụp trang web khác.\n👉 Cách đơn giản nhất: Nhấn nút Mở truyện xong, dùng chức năng CHỤP MÀN HÌNH trên điện thoại của bạn!\n📱 Thường là nhấn nút Nguồn + Giảm âm lượng cùng lúc.');
+}
+</script>
+
+</body>
+</html>
