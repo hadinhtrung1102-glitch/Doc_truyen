@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học Tiếng Trung - HSK & Chủ Đề</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        :root {
+            --primary: #d32f2f;
+            --secondary: #f57c00;
+            --light: #fff8f0;
+            --dark: #2d2d2d;
+            --card: #ffffff;
+            --border: #e0e0e0;
+        }
+        body {
+            background: linear-gradient(135deg, #fff8f0 0%, #ffe8cc 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+        header {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        }
+        header h1 { font-size: 1.8rem; margin-bottom: 0.3rem; }
+        header p { opacity: 0.95; font-size: 1rem; }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        .section {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+        }
+        .section-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.8rem;
+        }
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.8rem;
+        }
+        .btn {
+            padding: 0.9rem 1rem;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-align: center;
+            background: #f5f5f5;
+            color: var(--dark);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .btn-hsk { background: #e8f5e9; }
+        .btn-hsk:hover, .btn-hsk.active { background: #2e7d32; color: white; border-color: #2e7d32; }
+        .btn-skill { background: #e3f2fd; }
+        .btn-skill:hover, .btn-skill.active { background: #1565c0; color: white; border-color: #1565c0; }
+        .btn-topic { background: #f3e5f5; }
+        .btn-topic:hover, .btn-topic.active { background: #7b1fa2; color: white; border-color: #7b1fa2; }
+        .result-box {
+            background: #fefefe;
+            border: 2px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-top: 1rem;
+            min-height: 120px;
+        }
+        .path-item {
+            padding: 0.6rem 0;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+        .path-item:last-child { border-bottom: none; }
+        .week-tag {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 0.15rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+        }
+        .action-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 0.8rem 1.5rem;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            gap: 0.8rem;
+            z-index: 100;
+        }
+        .action-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 10px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-reset { background: #e0e0e0; color: var(--dark); }
+        .status-text {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        .empty-state {
+            text-align: center;
+            color: #999;
+            padding: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .action-bar { position: sticky; margin-top: 1.5rem; box-shadow: none; background: transparent; }
+            body { padding-bottom: 0; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🇨🇳 Học Tiếng Trung</h1>
+        <p>Lộ trình cá nhân hóa — HSK • Chủ đề • 4 Kỹ năng</p>
+    </header>
+
+    <div class="container">
+        <!-- Chọn Trình độ / HSK -->
+        <section class="section">
+            <h2 class="section-title">📚 Chọn Trình độ HSK</h2>
+            <div class="grid-3">
+                <button class="btn btn-hsk" data-hsk="HSK1">HSK 1 — Cơ bản</button>
+                <button class="btn btn-hsk" data-hsk="HSK2">HSK 2 — Sơ cấp</button>
+                <button class="btn btn-hsk" data-hsk="HSK3">HSK 3 — Trung cấp</button>
+                <button class="btn btn-hsk" data-hsk="HSK4">HSK 4 — Trung cấp cao</button>
+                <button class="btn btn-hsk" data-hsk="HSK5">HSK 5 — Nâng cao</button>
+                <button class="btn btn-hsk" data-hsk="HSK6">HSK 6 — Thông thạo</button>
+            </div>
+        </section>
+
+        <!-- Chọn Kỹ năng -->
+        <section class="section">
+            <h2 class="section-title">🎯 Chọn Kỹ năng cần học</h2>
+            <p style="font-size:0.9rem; color:#666; margin-bottom:0.8rem;">✅ Có thể chọn nhiều kỹ năng cùng lúc</p>
+            <div class="grid-4">
+                <button class="btn btn-skill" data-skill="nghe">👂 Nghe</button>
+                <button class="btn btn-skill" data-skill="noi">🗣️ Nói</button>
+                <button class="btn btn-skill" data-skill="doc">📖 Đọc</button>
+                <button class="btn btn-skill" data-skill="viet">✍️ Viết</button>
+            </div>
+        </section>
+
+        <!-- Chọn Chủ đề -->
+        <section class="section">
+            <h2 class="section-title">🏷️ Chọn Chủ đề tự chọn</h2>
+            <div class="grid-3">
+                <button class="btn btn-topic" data-topic="giaodien">💬 Giao tiếp hàng ngày</button>
+                <button class="btn btn-topic" data-topic="dulich">✈️ Du lịch</button>
+                <button class="btn btn-topic" data-topic="congviec">💼 Công việc</button>
+                <button class="btn btn-topic" data-topic="hocduong">🏫 Học đường</button>
+                <button class="btn btn-topic" data-topic="thethao">⚽ Thể thao & Sức khỏe</button>
+                <button class="btn btn-topic" data-topic="amthuc">🍜 Ẩm thực & Văn hóa</button>
+            </div>
+        </section>
+
+        <!-- Kết quả & Lộ trình -->
+        <section class="section">
+            <h2 class="section-title">🗺️ Lộ Trình Học Cụ Thể</h2>
+            <div class="result-box" id="resultBox">
+                <div class="empty-state">👈 Vui lòng chọn trình độ, kỹ năng và chủ đề trên, sau đó nhấn <strong>Tạo Lộ Trình</strong></div>
+            </div>
+            <p class="status-text" id="statusText"></p>
+        </section>
+
+        <!-- Nút hành động -->
+        <div class="action-bar">
+            <button class="action-btn btn-reset" id="resetBtn">🔄 Đặt lại</button>
+            <button class="action-btn btn-primary" id="genBtn">✨ Tạo Lộ Trình</button>
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu lộ trình theo HSK, Kỹ năng, Chủ đề
+        const duLieuLopTrinh = {
+            HSK1: {
+                mota: "✅ HSK 1: Nắm khoảng 150 từ vựng, giao tiếp cực cơ bản, hiểu & sử dụng câu đơn giản nhất.",
+                nghe: "🔊 Nghe: Làm quen với âm thanh, thanh điệu, nghe từ đơn và cụm từ rất ngắn — 10 phút/ngày",
+                noi: "🗣️ Nói: Luyện phát âm từng âm, thanh điệu đúng, tự giới thiệu, hỏi tên, tuổi, quốc tịch — 10 phút/ngày",
+                doc: "📖 Đọc: Học 150 chữ Hán cơ bản, nhận dạng nét cơ bản, đọc phiên âm Pinyin chuẩn — 15 phút/ngày",
+                viet: "✍️ Viết: Học quy tắc viết nét, viết 100 chữ đơn giản theo đúng thứ tự nét — 10 phút/ngày",
+                chuDe: {
+                    giaodien: "→ Tuần 1-2: Chào hỏi, tự giới thiệu, hỏi & trả lời tên, tuổi, nghề nghiệp",
+                    dulich: "→ Tuần 3-4: Hỏi đường, giới thiệu bản thân, mua vé, hỏi giá đơn giản",
+                    congviec: "→ Tuần 1-4: Giới thiệu nghề nghiệp, thời gian làm việc đơn giản",
+                    hocduong: "→ Tuần 1-4: Từ vựng lớp học, chào thầy cô, bạn bè, hỏi giờ học",
+                    thethao: "→ Tuần 3-4: Nói về môn thể thao yêu thích, sở thích đơn giản",
+                    amthuc: "→ Tuần 1-4: Tên món ăn phổ biến, gọi món đơn giản, cảm ơn"
+                }
+            },
+            HSK2: {
+                mota: "✅ HSK 2: Khoảng 300 từ vựng, giao tiếp đơn giản về cuộc sống hàng ngày, nói về sở thích, thói quen.",
+                nghe: "🔊 Nghe: Nghe câu ngắn, hội thoại đơn giản về cuộc sống hàng ngày — 12 phút/ngày",
+                noi: "🗣️ Nói: Mô tả người, địa điểm, thói quen hàng ngày, hỏi & trả lời về thời gian, số lượng — 12 phút/ngày",
+                doc: "📖 Đọc: Đọc hiểu câu ngắn, thông báo ngắn, đoạn văn rất đơn giản — 15 phút/ngày",
+                viet: "✍️ Viết: Viết câu đơn hoàn chỉnh, điền thông tin cá nhân, viết thiệp ngắn — 12 phút/ngày",
+                chuDe: {
+                    giaodien: "→ Tuần 1-3: Giao tiếp hàng ngày: chào hỏi, mời bạn, mời ăn, hẹn gặp",
+                    dulich: "→ Tuần 4-6: Đặt phòng khách sạn, hỏi đường, mua vé tàu/xe, giới thiệu địa điểm",
+                    congviec: "→ Tuần 1-6: Thời gian biểu, công việc hàng ngày, yêu cầu công việc cơ bản",
+                    hocduong: "→ Tuần 1-6: Môn học, thời khóa biểu, bài tập, yêu cầu giáo viên",
+                    thethao: "→ Tuần 4-6: Thời gian rảnh, hoạt động thể chất, lịch tập luyện",
+                    amthuc: "→ Tuần 1-6: Món ăn yêu thích, cách nấu đơn giản, mời bạn đi ăn"
+                }
+            },
+            HSK3: {
+                mota: "✅ HSK 3: Khoảng 600 từ vựng, giao tiếp trong nhiều tình huống, mô tả kinh nghiệm, cảm xúc, đưa ra ý kiến đơn giản.",
+                nghe: "🔊 Nghe: Nghe đoạn hội thoại trung bình, hiểu thông tin chính, nghe thông báo, hướng dẫn — 15 phút/ngày",
+                noi: "🗣️ Nói: Nói về kinh nghiệm, kế hoạch, mô tả sự việc, đưa ra ý kiến đơn giản — 15 phút/ngày",
+                doc: "📖 Đọc: Đọc hiểu đoạn văn ngắn, thư, tin nhắn, thông tin hướng dẫn — 20 phút/ngày",
+                viet: "✍️ Viết: Viết thư ngắn, nhắn tin, mô tả sự việc, viết đoạn 80-100 chữ — 15 phút/ngày",
+                chuDe: {
+                    giaodien: "→ Tuần 1-4: Giao tiếp tự nhiên, mời, từ chối lịch sự, giải thích lý do, bày tỏ cảm xúc",
+                    dulich: "→ Tuần 5-8: Lên kế hoạch du lịch, đặt vé/hotel, mô tả cảnh đẹp, trải nghiệm du lịch",
+                    congviec: "→ Tuần 1-8: Mô tả công việc, trình bày ý kiến, thảo luận kế hoạch, viết email đơn giản",
+                    hocduong: "→ Tuần 1-8: Phương pháp học, khó khăn và giải pháp, trình bày ý kiến trong lớp",
+                    thethao: "→ Tuần 5-8: Lợi ích sức khỏe, thói quen tập luyện, bình luận trận đấu đơn giản",
+                    amthuc: "→ Tuần 1-8: Mô tả món ăn, văn hóa ẩm thực, mời bạn ăn, nói về phong tục"
+                }
+            },
+            HSK4: {
+                mota: "✅ HSK 4: Khoảng 1200 từ vựng, giao tiếp tự nhiên với người bản xứ, thảo luận nhiều chủ đề, hiểu nội dung chính trong bài nói/đọc.",
+                nghe: "🔊 Nghe: Nghe bài nói dài hơn, hiểu ý chính & chi tiết, nghe tin tức, bài thuyết trình ngắn — 20 phút/ngày",
+                noi: "🗣️ Nói: Nói liên tục, trình bày quan điểm, thảo luận, kể chuyện, mô tả chi tiết — 20 phút/ngày",
+                doc: "📖 Đọc: Đọc hiểu bài dài, báo chí, bài viết thông tin, nắm ý chính & chi tiết — 25 phút/ngày",
+                viet: "✍️ Viết: Viết thư, báo cáo ngắn, bài luận 150-250 chữ, diễn đạt ý mạch lạc — 20 phút/ngày",
+                chuDe: {
+                    giaodien: "→ Tháng 1: Giao tiếp sâu hơn, tranh luận nhẹ nhàng, bày tỏ quan điểm cá nhân, giao tiếp trong xã hội",
+                    dulich: "→ Tháng 2: Trải nghiệm du lịch, văn hóa địa phương, chia sẻ ấn tượng, viết nhật ký du lịch",
+                    congviec: "→ Tháng 1-2: Thảo luận công việc, phỏng vấn, viết báo cáo, đề xuất ý kiến, giao tiếp với đối tác",
+                    hocduong: "→ Tháng 1-2: Trình bày bài học, tham gia thảo luận nhóm, viết bài luận học thuật cơ bản",
+                    thethao: "→ Tháng 2: Bình luận thể thao, thảo luận lối sống lành mạnh, tổ chức hoạt động thể thao",
+                    amthuc: "→ Tháng 1-2: Văn hóa ẩm thực, món ăn các vùng, mời bạn, giải thích cách nấu ăn chi tiết"
+                }
+            },
+            HSK5: {
+                mota: "✅ HSK 5: Khoảng 2500 từ vựng, đọc hiểu bài dài, nói trôi chảy, sử dụng tiếng Trung trong học tập, công việc và giao tiếp xã hội.",
+                nghe: "🔊 Nghe: Nghe bài giảng, tin tức, phim ảnh, hiểu hầu hết nội dung, nắm bắt ý chính & chi tiết sâu — 25 phút/ngày",
+                noi: "🗣️ Nói: Nói tự nhiên, chi tiết, trình bày bài thuyết trình, tham gia thảo luận, kể chuyện có cấu trúc — 25 phút/ngày",
+                doc: "📖 Đọc: Đọc hiểu văn bản dài, sách, báo, tạp chí, hiểu cấu trúc & ý đồ tác giả — 30 phút/ngày",
+                viet: "✍️ Viết: Viết bài luận, bài báo cáo, bình luận, 300-400 chữ, cấu trúc rõ ràng, diễn đạt tự nhiên — 25 phút/ngày",
+                chuDe: {
+                    giaodien: "→ Tháng 1-2: Tham gia thảo luận xã hội, tranh luận, bày tỏ quan điểm một cách có căn cứ",
+                    dulich: "→ Tháng 3: Viết bài du lịch, giới thiệu văn hóa, lịch sử địa điểm, phân tích trải nghiệm",
+                    congviec: "→ Tháng 1-3: Làm việc độc lập, họp, viết tài liệu công việc, thuyết trình dự án",
+                    hocduong: "→ Tháng 1-3: Nghiên cứu, viết báo cáo học thuật, thuyết trình trước lớp, bảo vệ ý kiến",
+                    thethao: "→ Tháng 3: Bình luận chuyên sâu, phân tích chiến thuật, thảo luận chính sách thể thao",
+                    amthuc: "→ Tháng 1-3: Nghiên cứu văn hóa ẩm thực, viết bài đánh giá, giới thiệu đặc sản vùng miền"
+                }
+            },
+            HSK6: {
+                mota: "✅ HSK 6: Khoảng 5000+ từ vựng, sử dụng tiếng Trung một cách linh hoạt, chính xác trong mọi tình huống, hiểu sắc thái ngôn ngữ, diễn đạt mạch lạc và tự nhiên như người bản xứ.",
+                nghe: "🔊 Nghe: Nghe hiểu mọi nội dung: hội thoại, bài giảng, phim, tin tức, thảo luận chuyên ngành — 30 phút/ngày",
+                noi: "🗣️ Nói: Nói tự nhiên, linh hoạt, sử dụng thành ngữ, diễn đạt sắc thái, thuyết trình chuyên nghiệp — 30 phút/ngày",
+                doc: "📖 Đọc: Đọc hiểu mọi loại văn bản: văn học, báo chí, tài liệu chuyên ngành, hiểu sâu sắc — 35 phút/ngày",
+                viet: "✍️ Viết: Viết bài có chiều sâu, cấu trúc chặt chẽ, sử dụng từ ngữ phong phú, 400-600 chữ — 30 phút/ngày",
+                chuDe: {
+                    giaodien: "→ Tháng 1-3: Tham gia thảo luận chuyên ngành, tranh luận có luận cứ, giao tiếp ở cấp độ cao",
+                    dulich: "→ Tháng 4: Viết bài du lịch chất lượng, phân tích văn hóa, so sánh đặc điểm các vùng miền",
+                    congviec: "→ Tháng 1-4: Soạn thảo tài liệu chuyên nghiệp, đàm phán, thuyết trình chiến lược, giao tiếp quốc tế",
+                    hocduong: "→ Tháng 1-4: Nghiên cứu độc lập, viết luận văn, tham gia hội thảo học thuật",
+                    thethao: "→ Tháng 4: Bình luận chuyên nghiệp, phân tích chiến thuật, viết bài bình luận thể thao chất lượng cao",
+                    amthuc: "→ Tháng 1-4: Nghiên cứu văn hóa ẩm thực qua các thời kỳ, viết bài phân tích, giới thiệu di sản ẩm thực"
+                }
+            }
+        };
+
+        // Trạng thái chọn
+        let trangThai = {
+            hsk: null,
+            skills: [],
+            topics: []
+        };
+
+        // Lấy các phần tử
+        const hskBtns = document.querySelectorAll('[data-hsk]');
+        const skillBtns = document.querySelectorAll('[data-skill]');
+        const topicBtns = document.querySelectorAll('[data-topic]');
+        const resultBox = document.getElementById('resultBox');
+        const statusText = document.getElementById('statusText');
+        const genBtn = document.getElementById('genBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // Chọn HSK
+        hskBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                hskBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                trangThai.hsk = btn.dataset.hsk;
+                capNhatTrangThai();
+            });
+        });
+
+        // Chọn Kỹ năng
+        skillBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.classList.toggle('active');
+                const skill = btn.dataset.skill;
+                if (trangThai.skills.includes(skill)) {
+                    trangThai.skills = trangThai.skills.filter(s => s !== skill);
+                } else {
+                    trangThai.skills.push(skill);
+                }
+                capNhatTrangThai();
+            });
+        });
+
+        // Chọn Chủ đề
+        topicBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.classList.toggle('active');
+                const topic = btn.dataset.topic;
+                if (trangThai.topics.includes(topic)) {
+                    trangThai.topics = trangThai.topics.filter(t => t !== topic);
+                } else {
+                    trangThai.topics.push(topic);
+                }
+                capNhatTrangThai();
+            });
+        });
+
+        // Cập nhật trạng thái
+        function capNhatTrangThai() {
+            const hskText = trangThai.hsk || "Chưa chọn";
+            const skillText = trangThai.skills.length ? trangThai.skills.join(", ") : "Chưa chọn";
+            const topicText = trangThai.topics.length ? trangThai.topics.map(t => {
+                const mapChuDe = {
+                    giaodien: "Giao tiếp hàng ngày",
+                    dulich: "Du lịch",
+                    congviec: "Công việc",
+                    hocduong: "Học đường",
+                    thethao: "Thể thao & Sức khỏe",
+                    amthuc: "Ẩm thực & Văn hóa"
+                };
+                return mapChuDe[t];
+            }).join(", ") : "Chưa chọn";
+            
+            statusText.innerHTML = `<strong>Đã chọn:</strong> ${hskText} | Kỹ năng: ${skillText} | Chủ đề: ${topicText}`;
+        }
+
+        // Tạo lộ trình
+        genBtn.addEventListener('click', taoLoTrinh);
+
+        function taoLoTrinh() {
+            if (!trangThai.hsk) {
+                resultBox.innerHTML = `<div class="empty-state" style="color:#d32f2f;">⚠️ Vui lòng chọn trình độ HSK trước!</div>`;
+                return;
+            }
+            if (trangThai.skills.length === 0) {
+                resultBox.innerHTML = `<div class="empty-state" style="color:#d32f2f;">⚠️ Vui lòng chọn ít nhất 1 kỹ năng cần học!</div>`;
+                return;
+            }
+            if (trangThai.topics.length === 0) {
+                resultBox.innerHTML = `<div class="empty-state" style="color:#d32f2f;">⚠️ Vui lòng chọn ít nhất 1 chủ đề!</div>`;
+                return;
+            }
+
+            const data = duLieuLopTrinh[trangThai.hsk];
+            let html = `<h3 style="color:var(--primary); margin-bottom:1rem;">📋 LỘ TRÌNH HỌC ${trangThai.hsk}</h3>`;
+            html += `<p style="margin-bottom:1rem; line-height:1.6;">${data.mota}</p>`;
+            
+            // Thời gian gợi ý
+            const tongThoiGian = trangThai.skills.length * 15;
+            html += `<p style="background:#fff3e0; padding:0.8rem; border-radius:8px; margin-bottom:1rem;">⏱️ <strong>Tổng thời gian/ngày:</strong> khoảng ${tongThoiGian} phút — Học đều đặn mỗi ngày sẽ đạt mục tiêu!</p>`;
+
+            // Nội dung theo kỹ năng
+            html += `<h4 style="margin:1.2rem 0 0.6rem 0; color:#444;">📌 Nội dung theo kỹ năng:</h4>`;
+            trangThai.skills.forEach(skill => {
+                html += `<div class="path-item">${data[skill]}</div>`;
+            });
+
+            // Nội dung theo chủ đề
+            html += `<h4 style="margin:1.5rem 0 0.6rem 0; color:#444;">📌 Nội dung theo chủ đề:</h4>`;
+            trangThai.topics.forEach(topic => {
+                html += `<div class="path-item">${data.chuDe[topic]}</div>`;
+            });
+
+            // Lời khuyên
+            html += `<div style="margin-top:1.2rem; padding:1rem; background:#e8f5e9; border-radius:8px;">
+                💡 <strong>Lời khuyên:</strong> Học đều đặn mỗi ngày, luyện kết hợp các kỹ năng. HSK cần khoảng 3-6 tháng cho mỗi cấp độ nếu học đều 30-60 phút/ngày. Chúc bạn học tốt! 🎉
+            </div>`;
+
+            resultBox.innerHTML = html;
+        }
+
+        // Đặt lại
+        resetBtn.addEventListener('click', () => {
+            hskBtns.forEach(b => b.classList.remove('active'));
+            skillBtns.forEach(b => b.classList.remove('active'));
+            topicBtns.forEach(b => b.classList.remove('active'));
+            trangThai = { hsk: null, skills: [], topics: [] };
+            resultBox.innerHTML = `<div class="empty-state">👈 Vui lòng chọn trình độ, kỹ năng và chủ đề trên, sau đó nhấn <strong>Tạo Lộ Trình</strong></div>`;
+            statusText.innerHTML = "";
+        });
+    </script>
+</body>
+</html>
